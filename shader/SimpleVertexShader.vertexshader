@@ -2,11 +2,19 @@
 
 // Input vertex data, different for all executions of this shader.
 layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec3 vertex_color;
+
+out vec3 fragment_color;
+
+uniform mat4 M;
+uniform mat4 V;
+uniform mat4 P;
 
 void main(){
 
-    gl_Position.xyz = vertexPosition_modelspace;
-    gl_Position.w = 1.0;
+    gl_Position = P * V * M * vec4(vertexPosition_modelspace, 1);
+    fragment_color = vertex_color;
+    //gl_Position.w = 1.0;
 
 }
 
