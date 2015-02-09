@@ -1,9 +1,9 @@
 #LDLIBS=-lglut -lGLEW -lGL -lSOIL -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
 LDLIBS=-lSOIL -lGLEW -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
 CFLAGs=-c -Wall -g -O
-SRC= tutorial02.cpp ../common/shader.cpp
+SRC= gameMainApp.cpp common/shader.cpp
 OBJ=$(SRC:.cpp=.o)
-EXE=triangle
+EXE= gameMainApp
 
 #all: $(SRC) $(EXE)
 	
