@@ -78,20 +78,13 @@ int main( void )
 	glm::mat4 Projection = glm::perspective(45.0f, WINDOW_RATIO, 0.1f, 100.0f);
 
 	glm::mat4 View = glm::lookAt(
-		    glm::vec3(0,15,40),
+		    glm::vec3(0,15,60),
 		    glm::vec3(0,0,0),
 		    glm::vec3(0,1,0)
 		);
 	glm::mat4 Model = glm::mat4(1.0f);
 	glm::mat4 MVP = Projection * View * Model;
 
-	static float tip;
-	const float step = 0.001;
-	const float begin = 0.000;
-	const float end = 0.500;
-
-	tip += step;
-	if(tip > end) tip = begin;
 
 
 	static const GLfloat g_vertex_buffer_data[] = { 
@@ -113,7 +106,7 @@ int main( void )
 	         //back
 		 0.0f,  5.0f, 0.0f,
 		-5.0f,  0.0f,-3.0f,
-		 5.0f,  0.0f, 3.0f,
+		 5.0f,  0.0f,-3.0f,
 
 		 /*
 		 //botton left
@@ -174,6 +167,18 @@ int main( void )
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
 	do{
+
+		static float tip;
+		const float step = 0.050;
+		const float begin = 0.000;
+		const float end = 359.000;
+
+		tip += step;
+		if(tip > end) tip = begin;
+
+
+	        glm::mat4 currentM;
+	        glm::mat4 currentV;
 		// Clear the screen
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -181,7 +186,9 @@ int main( void )
 		glUseProgram(programID);
 		//glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 		glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, glm::value_ptr(Projection));
-		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(View));
+
+		currentV = glm::rotate(View, tip, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(currentV));
 		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(Model));
 
 		// 1rst attribute buffer : vertices
@@ -210,6 +217,15 @@ int main( void )
 
 		// Draw the triangle !
 		//
+		glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
+
+		//currentM = glm::translate(Model, glm::vec3(-20.0f, 0.0f, 0.0f));
+		//glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(currentM));
+		//glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
+
+		currentM = glm::rotate(Model, tip, glm::vec3(0.0f, 0.0f, 1.0f));
+		currentM = glm::translate(currentM, glm::vec3(10.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(currentM));
 		glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
 
 		glDisableVertexAttribArray(0);
