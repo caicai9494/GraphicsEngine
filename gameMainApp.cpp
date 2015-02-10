@@ -66,9 +66,11 @@ int main( void )
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS); 
 
-	GLuint VertexArrayID;
+	GLuint VertexArrayID, terrainVAO;
 	glGenVertexArrays(1, &VertexArrayID);
+	glGenVertexArrays(1, &terrainVAO);
 	glBindVertexArray(VertexArrayID);
+	glBindVertexArray(terrainVAO);
 
 	// Create and compile our GLSL program from the shaders
 	GLuint programID = LoadShaders( "shader/SimpleVertexShader.vertexshader", "shader/SimpleFragmentShader.fragmentshader" );
@@ -78,7 +80,7 @@ int main( void )
 	glm::mat4 Projection = glm::perspective(45.0f, WINDOW_RATIO, 0.1f, 100.0f);
 
 	glm::mat4 View = glm::lookAt(
-		    glm::vec3(0,15,60),
+		    glm::vec3(0,60,30),
 		    glm::vec3(0,0,0),
 		    glm::vec3(0,1,0)
 		);
@@ -133,6 +135,62 @@ int main( void )
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_element_data), g_element_data, GL_STATIC_DRAW);
 
+	const int SIZEX = 4;
+	const int SIZEZ = 4;
+	glm::vec3 heightmap_vertex_data[SIZEX * SIZEZ];
+	glm::vec3 heightmap_color_data[SIZEX * SIZEZ];
+
+	static float fheights[SIZEX * SIZEZ] = {
+	    4.0f, 2.0f, 3.0f, 1.0f,
+	    3.0f, 5.0f, 8.0f, 2.0f,
+	    7.0f, 10.0f, 12.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f
+	};
+
+	const int LENX = 80;
+	const int LENZ = 80;
+	for(int i = 0; i < SIZEX * SIZEZ; i++)
+	{
+	    float x,z;
+
+	    z = (float)i / SIZEZ;
+	    x = float(i % SIZEX);
+
+	    heightmap_vertex_data[i] = 
+		glm::vec3(
+		        -LENX/2 + x * LENX / float(SIZEX - 1),
+			fheights[i],
+			-LENZ/2 + z * LENZ / float(SIZEZ - 1)
+			);
+	    heightmap_color_data[i] = 
+		glm::vec3(
+			(float)i/10, (float)i/4, (float)(SIZEX * SIZEZ - i)/11
+			);
+	}
+
+	static GLint heightmap_element_data[] = {
+	    0,4,1,5,2,6,3,7,16,
+	    4,8,5,9,6,10,7,11,16,
+	    8,12,9,13,10,14,11,15
+	};
+
+	GLuint terrain_vertexbuffer;
+	glGenBuffers(1, &terrain_vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, terrain_vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * SIZEX * SIZEZ, heightmap_vertex_data, GL_STATIC_DRAW);
+
+	GLuint terrain_colorbuffer;
+	glGenBuffers(1, &terrain_colorbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, terrain_colorbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * SIZEX * SIZEZ, heightmap_color_data, GL_STATIC_DRAW);
+
+	GLuint terrain_elementbuffer;
+	glGenBuffers(1, &terrain_elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_elementbuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(heightmap_element_data), heightmap_element_data, GL_STATIC_DRAW);
+	glEnable(GL_PRIMITIVE_RESTART);
+	glPrimitiveRestartIndex(SIZEX * SIZEZ);
+
 	double lastTime = glfwGetTime();
 	do{
 
@@ -168,8 +226,8 @@ int main( void )
 		glUseProgram(programID);
 		glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, glm::value_ptr(Projection));
 
-		currentV = glm::rotate(View, tip, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(currentV));
+		//currentV = glm::rotate(View, tip, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(View));
 		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(Model));
 
 		// 1rst attribute buffer : vertices
@@ -200,6 +258,7 @@ int main( void )
 		//
 		//glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		/*
 		glDrawElements(
 
 			GL_TRIANGLES,
@@ -208,8 +267,48 @@ int main( void )
 			(void*)0
 
 		);
+		*/
+
+		// 1rst attribute buffer : vertices
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertexbuffer);
+		glVertexAttribPointer(
+			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
+		// 2nd attribute buffer : colors
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, terrain_colorbuffer);
+		glVertexAttribPointer(
+			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
+		// Draw the triangle !
+		//
+		//glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_elementbuffer);
+		glDrawElements(
+
+			GL_TRIANGLE_STRIP,
+			18,
+			GL_UNSIGNED_INT,
+			(void*)0
+
+		);
+
 
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
