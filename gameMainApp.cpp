@@ -88,37 +88,24 @@ int main( void )
 
 
 	static const GLfloat g_vertex_buffer_data[] = { 
-	         //front
+	         //top
 		 0.0f,  5.0f, 0.0f,
+		 //left front
 		-5.0f,  0.0f, 3.0f,
-		 5.0f,  0.0f, 3.0f,
-
-	         //left
-		 0.0f,  5.0f, 0.0f,
+		 //left back
 		-5.0f,  0.0f,-3.0f,
-		-5.0f,  0.0f, 3.0f,
-
-	         //right
-		 0.0f,  5.0f, 0.0f,
+		 //right front
 		 5.0f,  0.0f, 3.0f,
+		 //right back
 		 5.0f,  0.0f,-3.0f,
 
-	         //back
-		 0.0f,  5.0f, 0.0f,
-		-5.0f,  0.0f,-3.0f,
-		 5.0f,  0.0f,-3.0f,
+	};
 
-		 /*
-		 //botton left
-		-5.0f,  0.0f,-3.0f,
-		 5.0f,  0.0f, 3.0f,
-		-5.0f,  0.0f, 3.0f,
-
-		 //botton right
-		 5.0f,  0.0f, 3.0f,
-		-5.0f,  0.0f, 3.0f,
-		 5.0f,  0.0f,-3.0f,
-		 */
+	static const GLuint g_element_data[] = { 
+	    0, 1, 2,
+	    0, 1, 3,
+	    0, 3, 4,
+	    0, 2, 4,
 	};
 
 	static const GLfloat g_color_buffer_data[] = { 
@@ -126,33 +113,8 @@ int main( void )
 		 0.0f,  1.0f, 0.0f,
 		 1.0f,  0.0f, 1.0f,
 		 1.0f,  0.0f, 0.0f,
-
-	         //left
-		 0.0f,  1.0f, 0.0f,
-		 1.0f,  0.0f, 1.0f,
-		 1.0f,  0.0f, 1.0f,
-
-	         //right
-		 0.0f,  1.0f, 0.0f,
-		 1.0f,  0.0f, 1.0f,
-		 1.0f,  0.0f, 1.0f,
-
-	         //back
-		 0.0f,  1.0f, 0.0f,
-		 1.0f,  0.0f, 1.0f,
-		 1.0f,  0.0f, 1.0f,
-
-		 /*
-		 //botton left
-		 1.0f,  0.0f, 1.0f,
-		 1.0f,  0.0f, 1.0f,
-		 1.0f,  0.0f, 1.0f,
-
-		 //botton right
-		 1.0f,  0.0f, 1.0f,
-		 1.0f,  0.0f, 1.0f,
-		 1.0f,  0.0f, 1.0f,
-		 */
+		 0.0f,  0.0f, 1.0f,
+		 1.0f,  1.0f, 1.0f,
 	};
 
 	
@@ -166,8 +128,28 @@ int main( void )
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
+	GLuint elementbuffer;
+	glGenBuffers(1, &elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_element_data), g_element_data, GL_STATIC_DRAW);
+
+	double lastTime = glfwGetTime();
 	do{
 
+	        //count FPS
+		static int frame = 0;
+
+		double currentTime = glfwGetTime();
+		if(currentTime - lastTime >= 1)
+		{
+		    printf("FPS %d per second\n", frame);
+		    frame = 0;
+		    lastTime++;
+		}
+		else
+		    frame++;
+
+		//simple animation
 		static float tip;
 		const float step = 0.050;
 		const float begin = 0.000;
@@ -184,7 +166,6 @@ int main( void )
 
 		// Use our shader
 		glUseProgram(programID);
-		//glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 		glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, glm::value_ptr(Projection));
 
 		currentV = glm::rotate(View, tip, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -217,16 +198,16 @@ int main( void )
 
 		// Draw the triangle !
 		//
-		glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
-
-		//currentM = glm::translate(Model, glm::vec3(-20.0f, 0.0f, 0.0f));
-		//glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(currentM));
 		//glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		glDrawElements(
 
-		currentM = glm::rotate(Model, tip, glm::vec3(0.0f, 0.0f, 1.0f));
-		currentM = glm::translate(currentM, glm::vec3(10.0f, 0.0f, 0.0f));
-		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(currentM));
-		glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
+			GL_TRIANGLES,
+			12          ,
+			GL_UNSIGNED_INT,
+			(void*)0
+
+		);
 
 		glDisableVertexAttribArray(0);
 
