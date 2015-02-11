@@ -77,10 +77,14 @@ int main( void )
 	GLuint projectionMatrixID = glGetUniformLocation(programID, "P");
 	GLuint viewMatrixID = glGetUniformLocation(programID, "M");
 	GLuint modelMatrixID = glGetUniformLocation(programID, "V");
+	GLuint normalID = glGetUniformLocation(programID, "N");
+	GLuint lightDirectionID = glGetUniformLocation(programID, "sunlight.lightDirection");
+	GLuint lightColorID = glGetUniformLocation(programID, "sunlight.lightColor");
+	GLuint lightAmbientID = glGetUniformLocation(programID, "sunlight.fAmbientIntensity");
 	glm::mat4 Projection = glm::perspective(45.0f, WINDOW_RATIO, 0.1f, 100.0f);
 
 	glm::mat4 View = glm::lookAt(
-		    glm::vec3(0,60,30),
+		    glm::vec3(0,80,30),
 		    glm::vec3(0,0,0),
 		    glm::vec3(0,1,0)
 		);
@@ -138,17 +142,18 @@ int main( void )
 	const int SIZEX = 4;
 	const int SIZEZ = 4;
 	glm::vec3 heightmap_vertex_data[SIZEX * SIZEZ];
+	glm::vec3 heightmap_normal_data[SIZEX * SIZEZ];
 	glm::vec3 heightmap_color_data[SIZEX * SIZEZ];
 
 	static float fheights[SIZEX * SIZEZ] = {
-	    4.0f, 2.0f, 3.0f, 1.0f,
+	    4.0f, 2.0f, 13.0f, 1.0f,
 	    3.0f, 5.0f, 8.0f, 2.0f,
-	    7.0f, 10.0f, 12.0f, 6.0f,
+	    7.0f, 10.0f, 2.0f, 6.0f,
 	    4.0f, 6.0f, 8.0f, 3.0f
 	};
 
-	const int LENX = 80;
-	const int LENZ = 80;
+	const int LENX = 90;
+	const int LENZ = 90;
 	for(int i = 0; i < SIZEX * SIZEZ; i++)
 	{
 	    float x,z;
@@ -168,11 +173,39 @@ int main( void )
 			);
 	}
 
-	static GLint heightmap_element_data[] = {
+	static int heightmap_element_data[] = {
 	    0,4,1,5,2,6,3,7,16,
 	    4,8,5,9,6,10,7,11,16,
 	    8,12,9,13,10,14,11,15
 	};
+
+	for(int i = 0; i < SIZEX * SIZEZ; i++)
+	{
+	    static int inx = 0;
+	    if(inx != SIZEX * SIZEZ - 1 && !inx && inx % (SIZEX + 1) == 0)
+		inx += 4;
+		
+	    int i1 = heightmap_element_data[inx];
+	    int i2 = heightmap_element_data[inx+1];
+	    int i3 = heightmap_element_data[inx+2];
+	    inx++;
+
+	    /*
+	    if(i1 > SIZEX * SIZEZ - 1 || i2 > SIZEX * SIZEZ -1 || i3 > SIZEX * SIZEZ -1)
+	    {
+		i--;
+		continue;
+	    }
+	    */
+
+	    glm::vec3 v1 = heightmap_vertex_data[i1];
+	    glm::vec3 v2 = heightmap_vertex_data[i2];
+	    glm::vec3 v3 = heightmap_vertex_data[i3];
+
+	    if(i % 2 == 0) heightmap_normal_data[i] = glm::cross(v1 - v2, v1 - v3);
+	    else heightmap_normal_data[i] = -glm::cross(v1 - v2, v1 - v3);
+
+	}
 
 	GLuint terrain_vertexbuffer;
 	glGenBuffers(1, &terrain_vertexbuffer);
@@ -183,6 +216,11 @@ int main( void )
 	glGenBuffers(1, &terrain_colorbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_colorbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * SIZEX * SIZEZ, heightmap_color_data, GL_STATIC_DRAW);
+
+	GLuint terrain_normalbuffer;
+	glGenBuffers(1, &terrain_normalbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, terrain_normalbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * SIZEX * SIZEZ, heightmap_normal_data, GL_STATIC_DRAW);
 
 	GLuint terrain_elementbuffer;
 	glGenBuffers(1, &terrain_elementbuffer);
@@ -229,6 +267,19 @@ int main( void )
 		//currentV = glm::rotate(View, tip, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(View));
 		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(Model));
+
+		//Normal
+		glm::mat4 normalMatrix = glm::mat4(1.0f);
+		glUniformMatrix4fv(normalID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+		//Light
+		glm::vec3 lightDirection = glm::vec3(3,4,3);
+		glUniform3fv(lightDirectionID, 1, glm::value_ptr(lightDirection));
+
+		glm::vec3 lightColor = glm::vec3(1,0,0);
+		glUniform3fv(lightColorID, 1, glm::value_ptr(lightColor));
+
+		GLfloat ambient = 0.5f;
+		glUniform1fv(lightAmbientID, 1, &ambient);
 
 		// 1rst attribute buffer : vertices
 		glEnableVertexAttribArray(0);
@@ -286,6 +337,18 @@ int main( void )
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_colorbuffer);
 		glVertexAttribPointer(
 			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
+		// 3rd attribute buffer : normals
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, terrain_normalbuffer);
+		glVertexAttribPointer(
+			2,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 			3,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?

@@ -1,14 +1,24 @@
 #version 330 core
 
-in vec3 fragment_color;
+smooth in vec4 fragment_color;
+smooth in vec4 vNormal;
+
+struct Sunlight
+{
+    vec3 lightDirection;
+    vec3 lightColor;
+    float fAmbientIntensity;
+};
+
+uniform Sunlight sunlight;
 
 // Ouput data
-out vec3 color;
+out vec4 color;
 
 
 void main()
 {
 
-	// Output color = red 
-	color = fragment_color;
+        float fDiffuse = max(0.0, dot(normalize(vNormal), -vec4(sunlight.lightDirection, 1.0))); 
+	color = fragment_color * vec4(sunlight.lightColor, 1.0) * fDiffuse;
 }
