@@ -52,8 +52,9 @@ static int heightmap_element_data[] = {
 	    8,12,9,13,10,14,11,15
 };
 
-void init_buffer()
+void init_buffer(GLuint VAO)
 {
+        //glBindVertexArray(VAO);
         //GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -74,7 +75,7 @@ void init_buffer()
 
 }
 
-void init_heightmap()
+void init_heightmap(GLuint VAO)
 {
 
 	for(int i = 0; i < SIZEX * SIZEZ; i++)

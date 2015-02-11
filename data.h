@@ -22,7 +22,7 @@ extern GLuint terrain_colorbuffer;
 extern GLuint terrain_normalbuffer;
 extern GLuint terrain_elementbuffer;
 
-void init_buffer();
-void init_heightmap();
+void init_buffer(GLuint VAO);
+void init_heightmap(GLuint VAO);
 
 #endif

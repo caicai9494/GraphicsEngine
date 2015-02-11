@@ -58,13 +58,14 @@ int main( void )
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS); 
 
-	GLuint VertexArrayID, terrainVAO;
+	//GLuint VertexArrayID, terrainVAO;
+	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
-	glGenVertexArrays(1, &terrainVAO);
+	//glGenVertexArrays(1, &terrainVAO);
 	glBindVertexArray(VertexArrayID);
 	glBindVertexArray(0);
 	
-	glBindVertexArray(terrainVAO);
+	//glBindVertexArray(terrainVAO);
 
 	// Create and compile our GLSL program from the shaders
 	GLuint programID = LoadShaders( "shader/SimpleVertexShader.vertexshader", "shader/SimpleFragmentShader.fragmentshader" );
@@ -140,6 +141,7 @@ int main( void )
 		GLfloat ambient = 0.5f;
 		glUniform1fv(lightAmbientID, 1, &ambient);
 
+	        glBindVertexArray(VertexArrayID);
 		// 1rst attribute buffer : vertices
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
