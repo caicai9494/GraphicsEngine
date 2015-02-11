@@ -1,7 +1,7 @@
 #LDLIBS=-lglut -lGLEW -lGL -lSOIL -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
 LDLIBS=-lSOIL -lGLEW -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
 CFLAGs=-c -Wall -g -O
-SRC= gameMainApp.cpp common/shader.cpp
+SRC= gameMainApp.cpp common/shader.cpp data.cpp
 OBJ=$(SRC:.cpp=.o)
 EXE= gameMainApp
 
