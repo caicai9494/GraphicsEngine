@@ -3,6 +3,19 @@
 
 #include "common_header.h"
 
+class Object 
+{
+    public:
+	Object();
+	~Object();
+        GLuint VAO;
+        GLuint VBO[MAX_VBO];
+        GLuint programID;
+    private:
+	UINT vbo_no;
+	
+};
+
 
 class VertexBufferObject
 {

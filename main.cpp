@@ -7,8 +7,6 @@ const int WINDOW_WIDTH = 1024;
 const float WINDOW_RATIO = (float)WINDOW_WIDTH / WINDOW_HEIGHT;
 const char* WINDOW_TITLE = "Graphics Test";
 
-#include "common/shader.hpp"
-#include "data.h"
 #include "scene.h"
 
 Scene scene;

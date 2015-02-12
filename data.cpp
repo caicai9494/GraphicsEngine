@@ -1,6 +1,19 @@
 #include "data.h"
 
 
+
+const GLfloat triangle_vertexbuffer[9] = { 
+		-1.0f, -1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,
+		 0.0f,  1.0f, 0.0f,
+};
+
+const GLfloat triangle_colorbuffer[9] = { 
+		 1.0f,  0.0f, 0.0f,
+		 0.0f,  1.0f, 0.0f,
+		 0.0f,  0.0f, 1.0f,
+};
+
 const GLfloat cube_vertexbuffer[108] = { 
 		-1.0f,-1.0f,-1.0f,
 		-1.0f,-1.0f, 1.0f,

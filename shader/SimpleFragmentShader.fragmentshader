@@ -1,5 +1,6 @@
 #version 330 core
 
+smooth in vec3 fragColor;
 // Ouput data
 out vec3 color;
 
@@ -7,6 +8,7 @@ void main()
 {
 
 	// Output color = red 
-	color = vec3(1,0,0);
+	color = fragColor;
+	//color = vec3(1.0, 0.0, 0.0);
 
 }

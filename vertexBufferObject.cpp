@@ -1,5 +1,19 @@
 #include "vertexBufferObject.h"
 
+Object::Object()
+{
+    vbo_no = 0;
+}
+Object::~Object()
+{
+    for(UINT i = 0; i < vbo_no; i++)
+	glDeleteBuffers(1, &VBO[i]);
+
+    glDeleteVertexArrays(1, &VAO);
+
+    glDeleteProgram(programID);
+}
+
 VertexBufferObject::VertexBufferObject()
 {
     //glGenVertexArrays(1, &_vao);

@@ -3,6 +3,7 @@
 
 #include "common_header.h"
 
+
 extern GLuint vertexbuffer;
 extern GLuint colorbuffer;
 extern GLuint elementbuffer;
@@ -28,6 +29,9 @@ void init_heightmap(GLuint VAO);
 extern const GLfloat cube_vertexbuffer[108];
 extern const GLfloat cube_colorbuffer[108];
 extern const GLfloat cube_normalbuffer[108];
+
+extern const GLfloat triangle_vertexbuffer[9];
+extern const GLfloat triangle_colorbuffer[9];
 //extern GLuint cube_elementbuffer;
 
 #endif
