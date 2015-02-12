@@ -25,4 +25,9 @@ extern GLuint terrain_elementbuffer;
 void init_buffer(GLuint VAO);
 void init_heightmap(GLuint VAO);
 
+extern const GLfloat cube_vertexbuffer[108];
+extern const GLfloat cube_colorbuffer[108];
+extern const GLfloat cube_normalbuffer[108];
+//extern GLuint cube_elementbuffer;
+
 #endif

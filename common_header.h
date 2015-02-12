@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
 
 // Include GLEW
 #include <GL/glew.h>
@@ -17,4 +21,5 @@
 
 using namespace glm;
 
-#define unsigned int UINT
+typedef unsigned int UINT;
+#define MAX_VBO 5

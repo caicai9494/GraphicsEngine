@@ -79,15 +79,16 @@ int main( void )
 	glm::mat4 Projection = glm::perspective(45.0f, WINDOW_RATIO, 0.1f, 100.0f);
 
 	glm::mat4 View = glm::lookAt(
-		    glm::vec3(0,80,30),
+		    glm::vec3(0,10,50),
 		    glm::vec3(0,0,0),
 		    glm::vec3(0,1,0)
-		);
+	);
+
 	glm::mat4 Model = glm::mat4(1.0f);
 	glm::mat4 MVP = Projection * View * Model;
 
-	init_buffer();
-	init_heightmap();
+	init_buffer(VertexArrayID);
+	//init_heightmap(VertexArrayID);
 
 	double lastTime = glfwGetTime();
 	do{
@@ -142,87 +143,15 @@ int main( void )
 		glUniform1fv(lightAmbientID, 1, &ambient);
 
 	        glBindVertexArray(VertexArrayID);
-		// 1rst attribute buffer : vertices
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-		glVertexAttribPointer(
-			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
-
-		// 2nd attribute buffer : colors
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-		glVertexAttribPointer(
-			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
-
-		// Draw the triangle !
-		//
-		//glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-		/*
-		glDrawElements(
-
-			GL_TRIANGLES,
-			12          ,
-			GL_UNSIGNED_INT,
-			(void*)0
-
-		);
-		*/
-
-		// 1rst attribute buffer : vertices
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertexbuffer);
-		glVertexAttribPointer(
-			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
-
-		// 2nd attribute buffer : colors
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, terrain_colorbuffer);
-		glVertexAttribPointer(
-			1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
-
-		// 3rd attribute buffer : normals
-		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, terrain_normalbuffer);
-		glVertexAttribPointer(
-			2,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
+		glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
 
 		// Draw the triangle !
 		//
-		//glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_elementbuffer);
+	        glEnable(GL_PRIMITIVE_RESTART);
+	        glPrimitiveRestartIndex(SIZEX * SIZEZ);
+	        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_elementbuffer);
 		glDrawElements(
-
 			GL_TRIANGLE_STRIP,
 			18,
 			GL_UNSIGNED_INT,
@@ -230,9 +159,11 @@ int main( void )
 
 		);
 
+		glBindVertexArray(0);
+
 
 		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
+		//glDisableVertexAttribArray(1);
 
 		// Swap buffers
 		glfwSwapBuffers(window);

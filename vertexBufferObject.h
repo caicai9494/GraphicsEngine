@@ -3,12 +3,23 @@
 
 #include "common_header.h"
 
+
 class VertexBufferObject
 {
     public:
-	void init_buffer(void *data, UINT datasize);
+	VertexBufferObject();
+	~VertexBufferObject();
+
+	void init_buffer(const float *data, UINT size, UINT index);
+
+	GLuint getID();
+	void useShader();
+	void addShader(GLuint shader);
+	void setVAO(GLuint vao);
     private:
-	GLuint buffer;
+	vector<GLuint> _buffer;
+
+	GLuint _shader;
 };
 
 #endif
