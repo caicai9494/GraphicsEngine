@@ -20,4 +20,5 @@ void main()
 {
     float diffuse = max(0.0, dot(normalize(vNormal), -sunlight.direction));
     color = texture2D(textureSampler, uv).rgb * sunlight.color * (sunlight.ambient + diffuse);
+    //color = vec3(1.0, 0.0, 0.0);
 }

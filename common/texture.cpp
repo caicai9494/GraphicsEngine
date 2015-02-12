@@ -1,5 +1,32 @@
 #include "texture.hpp"
 
+GLuint load_image(const char * imagepath)
+{
+    int img_w, img_h;
+    GLuint textureID;
+
+    unsigned char* img = SOIL_load_image(imagepath, &img_w, &img_h, NULL, 0);
+
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    /*
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
+	glGenerateMipmap(GL_TEXTURE_2D);
+	*/
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_w, img_h, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    return textureID;
+}
+
+
 GLuint loadBMP_custom(const char * imagepath){
 
 	printf("Reading image %s\n", imagepath);

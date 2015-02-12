@@ -1,24 +1,19 @@
 #LDLIBS=-lglut -lGLEW -lGL -lSOIL -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
+CC=g++
 LDLIBS=-lSOIL -lGLEW -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi
 CFLAGs=-c -Wall -g -O
-SRC= main.cpp common/controls.cpp common/shader.cpp data.cpp vertexBufferObject.cpp scene.cpp light.cpp common/objloader.cpp common/texture.cpp
-OBJ=$(SRC:.cpp=.o)
-EXE= gameMainApp
+OBJ= main.o common/controls.o common/shader.o data.o vertexBufferObject.o scene.o light.o common/objloader.o common/texture.o
+TARGET= gameMainApp
 
-#all: $(SRC) $(EXE)
 	
-#$(EXE): $(OBJ)
-#		g++ -o $@ $(LDLIBS) $(OBJ) 
-#.cpp.o:
-#	g++ $(CFLAGS) $< -o $@
+all: 	$(OBJ)
+	$(CC) $(OBJ) -o $(TARGET) $(LDLIBS)
 
+.c.o:
+	$(CC) $(CFLAGS) $< -g
 
-#triangle: ../common/shader_utils.o
-
-all:
-	g++ $(SRC) $(CFLAGS) $(LDLIBS) -o $(EXE)  
 
 clean:
-	rm -f *.o $(EXE)
+	rm -rf $(OBJ) $(TARGET)
 
 .PHONY: all clean
