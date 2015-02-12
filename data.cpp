@@ -1,6 +1,10 @@
 #include "data.h"
 
+vector<glm::vec3> t_cube_vertexbuffer;
+vector<glm::vec2> t_cube_uvbuffer;
+vector<glm::vec3> t_cube_normalbuffer;
 
+bool res = loadOBJ("cube.obj", t_cube_vertexbuffer, t_cube_uvbuffer, t_cube_normalbuffer);
 
 const GLfloat triangle_vertexbuffer[9] = { 
 		-1.0f, -1.0f, 0.0f,

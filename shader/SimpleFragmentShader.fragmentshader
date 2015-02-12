@@ -4,11 +4,16 @@ smooth in vec3 fragColor;
 // Ouput data
 out vec3 color;
 
+struct SunLight
+{
+    vec3 directon;
+    vec3 color;
+    float ambient;
+};
+
+uniform SunLight sunlight;
+
 void main()
 {
-
-	// Output color = red 
-	color = fragColor;
-	//color = vec3(1.0, 0.0, 0.0);
-
+    color = fragColor;
 }

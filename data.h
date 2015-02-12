@@ -2,6 +2,7 @@
 #define _DATA_H
 
 #include "common_header.h"
+#include "common/objloader.hpp"
 
 
 extern GLuint vertexbuffer;
@@ -26,10 +27,17 @@ extern GLuint terrain_elementbuffer;
 void init_buffer(GLuint VAO);
 void init_heightmap(GLuint VAO);
 
+/* color cube */
 extern const GLfloat cube_vertexbuffer[108];
 extern const GLfloat cube_colorbuffer[108];
 extern const GLfloat cube_normalbuffer[108];
 
+/* texture cube with normal */
+extern vector<glm::vec3> t_cube_vertexbuffer;
+extern vector<glm::vec2> t_cube_uvbuffer;
+extern vector<glm::vec3> t_cube_normalbuffer;
+
+/* color triangle */
 extern const GLfloat triangle_vertexbuffer[9];
 extern const GLfloat triangle_colorbuffer[9];
 //extern GLuint cube_elementbuffer;

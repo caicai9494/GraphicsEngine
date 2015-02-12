@@ -1,0 +1,21 @@
+#version 330 core
+
+smooth in vec3 vNormal;
+// Ouput data
+out vec3 color;
+
+
+struct SunLight
+{
+    vec3 direction;
+    vec3 color;
+    float ambient;
+};
+
+uniform SunLight sunlight;
+
+void main()
+{
+    float diffuse = max(0.0, dot(normalize(vNormal), -sunlight.direction));
+    color = sunlight.color * (sunlight.ambient + diffuse);
+}

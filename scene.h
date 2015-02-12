@@ -4,7 +4,10 @@
 #include "common_header.h"
 #include "data.h"
 #include "vertexBufferObject.h"
+#include "light.h"
 #include "common/shader.hpp"
+#include "common/controls.hpp"
+#include "common/objloader.hpp"
 
 class Scene
 {
@@ -13,6 +16,9 @@ class Scene
 	~Scene();
 	void init();
 	void render();
+    private:
+	Scene(const Scene &s) {}
+	Scene& operator= (const Scene& s) { return *this;}
 };
 
 #endif
