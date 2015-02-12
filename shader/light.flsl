@@ -1,6 +1,7 @@
 #version 330 core
 
 smooth in vec3 vNormal;
+in vec2 uv;
 // Ouput data
 out vec3 color;
 
@@ -13,9 +14,10 @@ struct SunLight
 };
 
 uniform SunLight sunlight;
+uniform sampler2D textureSampler;
 
 void main()
 {
     float diffuse = max(0.0, dot(normalize(vNormal), -sunlight.direction));
-    color = sunlight.color * (sunlight.ambient + diffuse);
+    color = texture2D(textureSampler, uv).rgb * sunlight.color * (sunlight.ambient + diffuse);
 }

@@ -8,6 +8,7 @@
 #include "common/shader.hpp"
 #include "common/controls.hpp"
 #include "common/objloader.hpp"
+#include "common/texture.hpp"
 
 class Scene
 {

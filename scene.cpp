@@ -7,6 +7,9 @@ GLuint modelID;
 GLuint viewID;
 GLuint projectionID;
 
+GLuint Texture;
+GLuint TextureID;
+
 Object obj;
 Object obj2;
 
@@ -60,10 +63,25 @@ void Scene::init()
     /* end bind triangle */
 
 
+    /* set up matrix*/
     GLuint programID = LoadShaders( "shader/light.vlsl", "shader/light.flsl" );
     modelID = glGetUniformLocation(programID, "M");
     viewID = glGetUniformLocation(programID, "V");
     projectionID = glGetUniformLocation(programID, "P");
+    /* end set up matrix*/
+
+    /* set up texture*/
+    Texture = loadDDS("uvtemplate.DDS");
+    /*
+    Texture = SOIL_load_OGL_texture(
+	    "textures/crate.jpg",
+	    SOIL_LOAD_AUTO,
+	    SOIL_CREATE_NEW_ID,
+	    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
+	    */
+    TextureID = glGetUniformLocation(programID, "textureSampler");
+    /* end set up texture*/
+
     obj.programID = programID;
 
     /*set directional light*/
@@ -81,6 +99,10 @@ void Scene::render()
 {
     glUseProgram(obj.programID);
     computeMatricesFromInputs();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Texture);
+    glUniform1i(TextureID, 0);
 
     /*set MVP */
     glm::mat4 modelM = glm::mat4(1.0f);
