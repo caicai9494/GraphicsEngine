@@ -15,6 +15,9 @@ class Object
 	void addData3D(vector<glm::vec3> v3);
 
 	void render();
+
+	ShaderProgram shader;
+
     private:
 	UINT vbo_no;
 	UINT vertex_size;

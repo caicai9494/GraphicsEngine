@@ -7,6 +7,7 @@
 #include "vertexBufferObject.h"
 #include "light.h"
 #include "texture.h"
+#include "shaderProgram.h"
 
 #include "common/shader.hpp"
 #include "common/controls.hpp"

@@ -20,6 +20,8 @@ Texture grassTex;
 Object suzunnaObj;
 Object groundObj;
 
+ShaderProgram shader1;
+
 DirectionalLight directionalLight;
 
 extern float tip;
@@ -49,10 +51,13 @@ void Scene::init()
     /* end bind cube */
 
     /* set up matrix*/
+    shader1.loadShaders("shader/light.vlsl", "shader/light.flsl");
+    /*
     GLuint programID = LoadShaders( "shader/light.vlsl", "shader/light.flsl" );
     modelID = glGetUniformLocation(programID, "M");
     viewID = glGetUniformLocation(programID, "V");
     projectionID = glGetUniformLocation(programID, "P");
+    */
     /* end set up matrix*/
 
     /* set up matrix*/
@@ -87,7 +92,8 @@ void Scene::init()
 
 void Scene::render()
 {
-    glUseProgram(suzunnaObj.programID);
+    //glUseProgram(suzunnaObj.programID);
+    
     computeMatricesFromInputs();
 
 
