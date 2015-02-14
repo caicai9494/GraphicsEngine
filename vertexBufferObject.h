@@ -2,6 +2,7 @@
 #define _VERTEX_BUFFER_OBJECT_H
 
 #include "common_header.h"
+#include "shaderProgram.h"
 
 class Object 
 {
