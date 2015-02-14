@@ -42,6 +42,11 @@ extern const GLfloat terrain_height[10 * 10];
 extern const GLfloat triangle_vertexbuffer[9];
 extern const GLfloat triangle_colorbuffer[9];
 
+/* ground */
+extern vector<glm::vec3> t_ground_vertexbuffer;
+extern vector<glm::vec2> t_ground_uvbuffer;
+extern vector<glm::vec3> t_ground_normalbuffer;
+
 
 /* generate contour */
 GLfloat* generate_contour(UINT x, UINT y);

@@ -16,10 +16,8 @@ GLuint b_projectionID;
 //GLuint TextureID;
 Texture glassTex;
 
-
-
-Object obj;
-Object obj2;
+Object suzunnaObj;
+Object groundObj;
 
 DirectionalLight directionalLight;
 
@@ -28,24 +26,26 @@ extern float tip;
 
 void Scene::init()
 {
-    /* bind cube normal + texture*/
-    glGenVertexArrays(1, &(obj.VAO));
-    glBindVertexArray(obj.VAO);
 
-    glGenBuffers(1, &(obj.VBO[0]));
-    glBindBuffer(GL_ARRAY_BUFFER, obj.VBO[0]);
+    
+    /* bind cube normal + texture*/
+    glGenVertexArrays(1, &(suzunnaObj.VAO));
+    glBindVertexArray(suzunnaObj.VAO);
+
+    glGenBuffers(1, &(suzunnaObj.VBO[0]));
+    glBindBuffer(GL_ARRAY_BUFFER, suzunnaObj.VBO[0]);
     glBufferData(GL_ARRAY_BUFFER, t_cube_vertexbuffer.size() * sizeof(glm::vec3), &t_cube_vertexbuffer[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-    glGenBuffers(1, &(obj.VBO[1]));
-    glBindBuffer(GL_ARRAY_BUFFER, obj.VBO[1]);
+    glGenBuffers(1, &(suzunnaObj.VBO[1]));
+    glBindBuffer(GL_ARRAY_BUFFER, suzunnaObj.VBO[1]);
     glBufferData(GL_ARRAY_BUFFER, t_cube_uvbuffer.size() * sizeof(glm::vec2), &t_cube_uvbuffer[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-    glGenBuffers(1, &(obj.VBO[2]));
-    glBindBuffer(GL_ARRAY_BUFFER, obj.VBO[2]);
+    glGenBuffers(1, &(suzunnaObj.VBO[2]));
+    glBindBuffer(GL_ARRAY_BUFFER, suzunnaObj.VBO[2]);
     glBufferData(GL_ARRAY_BUFFER, t_cube_normalbuffer.size() * sizeof(glm::vec3), &t_cube_normalbuffer[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
@@ -73,7 +73,7 @@ void Scene::init()
     glassTex.textureID = glGetUniformLocation(programID, "textureSampler");
     /* end set up texture*/
 
-    obj.programID = programID;
+    suzunnaObj.programID = programID;
 
     /*set directional light*/
     directionalLight.setDirection(glm::vec3(0.0, -1.0, 0.0));
@@ -88,7 +88,7 @@ void Scene::init()
 
 void Scene::render()
 {
-    glUseProgram(obj.programID);
+    glUseProgram(suzunnaObj.programID);
     computeMatricesFromInputs();
 
 
@@ -111,7 +111,7 @@ void Scene::render()
     glBindTexture(GL_TEXTURE_2D, glassTex.texture);
     glUniform1i(glassTex.textureID, 0);
 
-    glBindVertexArray(obj.VAO);
+    glBindVertexArray(suzunnaObj.VAO);
     glDrawArrays(GL_TRIANGLES, 0, t_cube_vertexbuffer.size());
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -132,7 +132,7 @@ void Scene::render()
     glBindTexture(GL_TEXTURE_2D, glassTex.texture);
     glUniform1i(glassTex.textureID, 0);
 
-    glBindVertexArray(obj.VAO);
+    glBindVertexArray(suzunnaObj.VAO);
     glDrawArrays(GL_TRIANGLES, 0, t_cube_vertexbuffer.size());
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);

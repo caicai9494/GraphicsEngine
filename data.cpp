@@ -1,5 +1,41 @@
 #include "data.h"
 
+glm::vec3 _t_ground_vertexbuffer[] = {
+    //right upper
+    glm::vec3(1.0f, 0.0f, 1.0f),
+    glm::vec3(-1.0f, 0.0f, 1.0f),
+    glm::vec3(1.0f, 0.0f, -1.0f),
+
+    //left lower
+    glm::vec3(-1.0f, 0.0f, 1.0f),
+    glm::vec3(1.0f, 0.0f, -1.0f),
+    glm::vec3(-1.0f, 0.0f, -1.0f),
+};
+glm::vec2 _t_ground_uvbuffer[] = {
+    //right upper
+    glm::vec2(1.0f, 1.0f),
+    glm::vec2(-1.0f, 1.0f),
+    glm::vec2(1.0f, -1.0f),
+
+    //left lower
+    glm::vec2(-1.0f, 1.0f),
+    glm::vec2(1.0f, -1.0f),
+    glm::vec2(-1.0f, -1.0f),
+};
+glm::vec3 _t_ground_normalbuffer[] = {
+    //right upper
+    glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f),
+};
+
+vector<glm::vec3> t_ground_vertexbuffer(_t_ground_vertexbuffer, _t_ground_vertexbuffer + sizeof(_t_ground_vertexbuffer)/sizeof(glm::vec3));
+vector<glm::vec2> t_ground_uvbuffer(_t_ground_uvbuffer, _t_ground_uvbuffer + sizeof(_t_ground_uvbuffer)/sizeof(glm::vec2));
+vector<glm::vec3> t_ground_normalbuffer(_t_ground_normalbuffer, _t_ground_normalbuffer + sizeof(_t_ground_normalbuffer)/sizeof(glm::vec3));
+
 GLfloat generate_height(float x, float y)
 {
     int m = (x > y) ? x : y;
