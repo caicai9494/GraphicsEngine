@@ -2,9 +2,12 @@
 #define _SCENE_H
 
 #include "common_header.h"
+
 #include "data.h"
 #include "vertexBufferObject.h"
 #include "light.h"
+#include "texture.h"
+
 #include "common/shader.hpp"
 #include "common/controls.hpp"
 #include "common/objloader.hpp"

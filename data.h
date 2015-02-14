@@ -36,10 +36,14 @@ extern const GLfloat cube_normalbuffer[108];
 extern vector<glm::vec3> t_cube_vertexbuffer;
 extern vector<glm::vec2> t_cube_uvbuffer;
 extern vector<glm::vec3> t_cube_normalbuffer;
+extern const GLfloat terrain_height[10 * 10];
 
 /* color triangle */
 extern const GLfloat triangle_vertexbuffer[9];
 extern const GLfloat triangle_colorbuffer[9];
-//extern GLuint cube_elementbuffer;
+
+
+/* generate contour */
+GLfloat* generate_contour(UINT x, UINT y);
 
 #endif

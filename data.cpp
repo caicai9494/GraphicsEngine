@@ -1,10 +1,31 @@
 #include "data.h"
 
+GLfloat generate_height(float x, float y)
+{
+    int m = (x > y) ? x : y;
+    return sqrt(m * m - x * x - y * y);
+}
+
+
+GLfloat* generate_contour(UINT x, UINT y)
+{
+    GLfloat *map = new GLfloat[x * y];
+
+    for(UINT i = 0; i < x; i++)
+    {
+	for(UINT j = 0; j < y; j++)
+	{
+	    map[i*y +j] = generate_height(x, y);
+	}
+    }
+
+    return map;
+}
 vector<glm::vec3> t_cube_vertexbuffer;
 vector<glm::vec2> t_cube_uvbuffer;
 vector<glm::vec3> t_cube_normalbuffer;
 
-bool res = loadOBJ("obj/cube.obj", t_cube_vertexbuffer, t_cube_uvbuffer, t_cube_normalbuffer);
+bool res = loadOBJ("obj/suzanne.obj", t_cube_vertexbuffer, t_cube_uvbuffer, t_cube_normalbuffer);
 
 const GLfloat triangle_vertexbuffer[9] = { 
 		-1.0f, -1.0f, 0.0f,
@@ -140,6 +161,34 @@ static float fheights[SIZEX * SIZEZ] = {
 	    4.0f, 2.0f, 13.0f, 1.0f,
 	    3.0f, 5.0f, 8.0f, 2.0f,
 	    7.0f, 10.0f, 2.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f
+};
+const GLfloat terrain_height[10 * 10] = {
+
+	    4.0f, 2.0f, 13.0f, 1.0f,
+	    3.0f, 5.0f, 8.0f, 2.0f,
+	    7.0f, 10.0f, 2.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f,
+	    4.0f, 2.0f, 13.0f, 1.0f,
+	    3.0f, 5.0f, 8.0f, 2.0f,
+	    7.0f, 10.0f, 2.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f,
+	    4.0f, 2.0f, 13.0f, 1.0f,
+	    3.0f, 5.0f, 8.0f, 2.0f,
+	    7.0f, 10.0f, 2.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f,
+	    4.0f, 2.0f, 13.0f, 1.0f,
+	    3.0f, 5.0f, 8.0f, 2.0f,
+	    7.0f, 10.0f, 2.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f,
+	    4.0f, 2.0f, 13.0f, 1.0f,
+	    3.0f, 5.0f, 8.0f, 2.0f,
+	    7.0f, 10.0f, 2.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f,
+	    4.0f, 2.0f, 13.0f, 1.0f,
+	    3.0f, 5.0f, 8.0f, 2.0f,
+	    7.0f, 10.0f, 2.0f, 6.0f,
+	    4.0f, 6.0f, 8.0f, 3.0f,
 	    4.0f, 6.0f, 8.0f, 3.0f
 };
 

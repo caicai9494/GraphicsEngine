@@ -10,9 +10,11 @@ const char* WINDOW_TITLE = "Graphics Test";
 #include "scene.h"
 
 Scene scene;
+float tip = 0;
 
 int main( void )
 {
+        srand(time(NULL));
 	// Initialise GLFW
 	if( !glfwInit() )
 	{
@@ -56,6 +58,11 @@ int main( void )
 
 
 	do{
+                const float step = 0.0005;
+	        tip += step;
+		if(tip > 359)
+		    tip = 0;
+
 		// Clear the screen
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

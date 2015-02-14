@@ -7,13 +7,23 @@ GLuint modelID;
 GLuint viewID;
 GLuint projectionID;
 
-GLuint Texture;
-GLuint TextureID;
+GLuint brdfID;
+GLuint b_modelID;
+GLuint b_viewID;
+GLuint b_projectionID;
+
+//GLuint Texture;
+//GLuint TextureID;
+Texture grassT;
+
+
 
 Object obj;
 Object obj2;
 
 DirectionalLight directionalLight;
+
+extern float tip;
 
 
 void Scene::init()
@@ -43,28 +53,6 @@ void Scene::init()
     glBindVertexArray(0);
     /* end bind cube */
 
-#if(0)
-    /* bind triangle */
-    glGenVertexArrays(1, &(obj2.VAO));
-    glBindVertexArray(obj2.VAO);
-
-    glGenBuffers(1, &(obj2.VBO[0]));
-    glBindBuffer(GL_ARRAY_BUFFER, obj2.VBO[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertexbuffer), triangle_vertexbuffer, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-    glGenBuffers(1, &(obj2.VBO[1]));
-    glBindBuffer(GL_ARRAY_BUFFER, obj2.VBO[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_colorbuffer), triangle_colorbuffer, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-    glBindVertexArray(0);
-    /* end bind triangle */
-#endif
-
-
     /* set up matrix*/
     GLuint programID = LoadShaders( "shader/light.vlsl", "shader/light.flsl" );
     modelID = glGetUniformLocation(programID, "M");
@@ -72,17 +60,17 @@ void Scene::init()
     projectionID = glGetUniformLocation(programID, "P");
     /* end set up matrix*/
 
+    /* set up matrix*/
+    brdfID = LoadShaders( "shader/brdf.vlsl", "shader/brdf.flsl" );
+    b_modelID = glGetUniformLocation(programID, "M");
+    b_viewID = glGetUniformLocation(programID, "V");
+    b_projectionID = glGetUniformLocation(programID, "P");
+    /* end set up matrix*/
+
     /* set up texture*/
     //Texture = loadDDS("textures/uvtemplate.DDS");
-    Texture = load_image("textures/crate.jpg");
-    /*
-    Texture = SOIL_load_OGL_texture(
-	    "textures/crate.jpg",
-	    SOIL_LOAD_AUTO,
-	    SOIL_CREATE_NEW_ID,
-	    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
-	    */
-    TextureID = glGetUniformLocation(programID, "textureSampler");
+    grassT.texture = load_image("textures/metalplate.jpg");
+    grassT.textureID = glGetUniformLocation(programID, "textureSampler");
     /* end set up texture*/
 
     obj.programID = programID;
@@ -120,22 +108,32 @@ void Scene::render()
 
     /*draw cube*/
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, Texture);
-    glUniform1i(TextureID, 0);
+    glBindTexture(GL_TEXTURE_2D, grassT.texture);
+    glUniform1i(grassT.textureID, 0);
 
     glBindVertexArray(obj.VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLES, 0, t_cube_vertexbuffer.size());
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     /*end draw cube*/
 
-#if(0)
-    /*draw triangle*/
-    glBindVertexArray(obj2.VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glUseProgramObjectARB(0);
+
+
+    /*draw another suzunnan*/
+    glUseProgram(brdfID);
+    glUniformMatrix4fv(b_viewID, 1, GL_FALSE, glm::value_ptr(viewM));
+    glUniformMatrix4fv(b_projectionID, 1, GL_FALSE, glm::value_ptr(projectionM));
+
+    glm::mat4 trans = glm::translate(modelM, glm::vec3(2.0, 1.0, 0.0));
+    glUniformMatrix4fv(b_modelID, 1, GL_FALSE, glm::value_ptr(trans));
+
+    glBindVertexArray(obj.VAO);
+    glDrawArrays(GL_TRIANGLES, 0, t_cube_vertexbuffer.size());
     glBindVertexArray(0);
-    /*end draw triangle*/
-#endif
+
+    glUseProgramObjectARB(0);
+    /*end draw another suzunnan*/
 
 }
 
