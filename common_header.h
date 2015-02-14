@@ -5,6 +5,7 @@
 #include <vector>
 #include <stack>
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 
