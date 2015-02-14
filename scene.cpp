@@ -14,7 +14,7 @@ GLuint b_projectionID;
 
 //GLuint Texture;
 //GLuint TextureID;
-Texture grassT;
+Texture glassTex;
 
 
 
@@ -69,8 +69,8 @@ void Scene::init()
 
     /* set up texture*/
     //Texture = loadDDS("textures/uvtemplate.DDS");
-    grassT.texture = load_image("textures/metalplate.jpg");
-    grassT.textureID = glGetUniformLocation(programID, "textureSampler");
+    glassTex.texture = load_image("textures/metalplate.jpg");
+    glassTex.textureID = glGetUniformLocation(programID, "textureSampler");
     /* end set up texture*/
 
     obj.programID = programID;
@@ -108,8 +108,8 @@ void Scene::render()
 
     /*draw cube*/
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, grassT.texture);
-    glUniform1i(grassT.textureID, 0);
+    glBindTexture(GL_TEXTURE_2D, glassTex.texture);
+    glUniform1i(glassTex.textureID, 0);
 
     glBindVertexArray(obj.VAO);
     glDrawArrays(GL_TRIANGLES, 0, t_cube_vertexbuffer.size());
@@ -128,9 +128,14 @@ void Scene::render()
     glm::mat4 trans = glm::translate(modelM, glm::vec3(2.0, 1.0, 0.0));
     glUniformMatrix4fv(b_modelID, 1, GL_FALSE, glm::value_ptr(trans));
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, glassTex.texture);
+    glUniform1i(glassTex.textureID, 0);
+
     glBindVertexArray(obj.VAO);
     glDrawArrays(GL_TRIANGLES, 0, t_cube_vertexbuffer.size());
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glUseProgramObjectARB(0);
     /*end draw another suzunnan*/

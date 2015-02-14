@@ -3,20 +3,21 @@
 // Ouput data
 out vec3 color;
 
+in vec2 uv;
 
-
-//struct SunLight
-//{
-//  vec3 direction;
-//    vec3 color;
-//    float ambient;
-//};
+struct SunLight
+{
+    vec3 direction;
+    vec3 color;
+    float ambient;
+};
 
 //uniform SunLight sunlight;
+uniform sampler2D textureSampler;
 
 void main()
 {
     //float diffuse = max(0.0, dot(normalize(vNormal), -sunlight.direction));
-    //color = texture2D(textureSampler, uv).rgb ;//* sunlight.color * (sunlight.ambient + diffuse);
-    color = vec3(1.0, 0.0, 0.0);
+    color = texture2D(textureSampler, uv).rgb ;//* sunlight.color * (sunlight.ambient + diffuse);
+    //color = vec3(1.0, 0.0, 0.0);
 }
