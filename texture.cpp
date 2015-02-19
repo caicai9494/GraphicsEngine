@@ -2,16 +2,17 @@
 
 Texture::Texture()
 {
-    texture_offset ++;
+    texture_total ++;
+    texture_offset = texture_total;
 }
 Texture::~Texture(){}
 
-GLuint Texture::texture_offset = -1;
+GLuint Texture::texture_total = -1;
 
-void Texture::bindTexture(GLenum text)
+void Texture::bindTexture()
 {
 
-    glActiveTexture(text + texture_offset);
+    glActiveTexture(GL_TEXTURE0 + texture_offset);
     glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(textureID, texture_offset);
 }

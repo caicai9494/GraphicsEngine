@@ -110,25 +110,17 @@ void Scene::render()
     glUniform1fv(directionalLight.ambientID, 1, directionalLight.getAmbientIntensity());
 
     /*draw suzunna*/
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, glassTex.texture);
-
-    glUniform1i(glassTex.textureID, 0);
-    //glassTex.bindTexture(0);
-
+    glassTex.bindTexture();
     /*move upwards*/
     glm::mat4 trans = glm::translate(modelM, glm::vec3(5.0,-2.0, 0.0));
     glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(trans));
 
     suzunnaObj.render();
-    glBindTexture(GL_TEXTURE_2D, 0);
-    //glassTex.unbindTexture();
+    glassTex.unbindTexture();
     /*end draw suzunna*/
 
     /*draw ground*/
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, grassTex.texture);
-    glUniform1i(grassTex.textureID, 1);
+    grassTex.bindTexture();
 
     /*move upwards*/
     glm::mat4 trans_ground = glm::scale(modelM, glm::vec3(10.0f));
@@ -140,8 +132,7 @@ void Scene::render()
     glm::mat4 trans2 = transpose(trans);
     glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(trans2));
     groundObj.render();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
+    grassTex.unbindTexture();
     /*end draw ground*/
 
     glUseProgramObjectARB(0);
@@ -155,13 +146,9 @@ void Scene::render()
     trans = glm::translate(modelM, glm::vec3(0.0,-2.0, 0.0));
     glUniformMatrix4fv(b_modelID, 1, GL_FALSE, glm::value_ptr(trans));
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, glassTex.texture);
-    glUniform1i(glassTex.textureID, 0);
-
+    glassTex.bindTexture();
     suzunnaObj.render();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glassTex.unbindTexture();
 
     glUseProgramObjectARB(0);
     /*end draw another suzunnan*/

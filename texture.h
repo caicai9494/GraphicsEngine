@@ -10,9 +10,11 @@ class Texture
 	~Texture();
 	GLuint texture;
 	GLuint textureID;
-	static GLuint texture_offset;
+	GLuint texture_offset;
 
-	void bindTexture(GLenum text = GL_TEXTURE0); 
+	static GLuint texture_total;
+
+	void bindTexture(); 
 	void unbindTexture(); 
     private:
 	Texture(const Texture &t) {}
