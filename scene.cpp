@@ -132,6 +132,12 @@ void Scene::render()
     glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(trans_ground));
 
     groundObj.render();
+
+    trans = glm::rotate(modelM, 45.0f, glm::vec3(2.0,-2.0, 0.0));
+    glm::mat4 trans2 = transpose(trans);
+    glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(trans2));
+    groundObj.render();
+
     glBindTexture(GL_TEXTURE_2D, 0);
     /*end draw ground*/
 
