@@ -1,5 +1,6 @@
 #include "core.h"
 #include "matrix.h"
+#include "draw.h"
 
 // Function Declarations
 // Glut requires that we use global/static functions so we declare a few below
@@ -72,8 +73,8 @@ void drawScene(void)
 //***************************************************************************
 //**************** Do not alter anything above this line ********************
 //************************* Begin Assignment ********************************
-
-
+    drawLine();
+/*
 	Matrix rot1, trans1;
 	Matrix rot2, trans2, scale2;
 	Matrix rot3, trans3, scale3;
@@ -87,25 +88,26 @@ void drawScene(void)
 	sun.Set(0,0,r); 
 	earth.Set(5*cos(8*g_RotStep), 0, 5*sin(8*g_RotStep));
 	
-	dir = earth - sun;
+	dir.Set(0, 0, -1);
 	dir.Normalize();
 	up = Vector3::YAXIS;
-	right.Cross(up, dir);
-	view.Set(dir, up, right, Point3(0,0,r));
+	right.Cross(dir, up);
+	view.Set(dir, up, right, Point3(0,0,5));
 
 	// Spinning Cube
 	rot1.MakeRotateY(g_Rotation);
-	trans1.MakeTranslate(sun);
-	sum = trans1 * rot1;
+	//trans1.MakeTranslate(sun);
+	sum =  rot1;
 	drawCube(view*sum);
+	*/
 
+	/*
 	    scale2.MakeScale(0.5f, 0.5f, 0.5f);
 	    rot2.MakeRotateY(2 * g_Rotation);
 	    trans2.MakeTranslate(earth);
 	    drawCube(view * sum*scale2*rot2*trans2);
 	    sum = sum * rot2 * trans2;
 	        
-	/*
 	        scale3.MakeScale(0.25f, 0.25f, 0.25f);
 		rot3.MakeRotateY(3 * g_Rotation);
 		trans3.MakeTranslate(4, 4, 0);

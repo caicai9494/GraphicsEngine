@@ -112,7 +112,9 @@ void Scene::render()
     /*draw suzunna*/
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, glassTex.texture);
+
     glUniform1i(glassTex.textureID, 0);
+    //glassTex.bindTexture(0);
 
     /*move upwards*/
     glm::mat4 trans = glm::translate(modelM, glm::vec3(5.0,-2.0, 0.0));
@@ -120,6 +122,7 @@ void Scene::render()
 
     suzunnaObj.render();
     glBindTexture(GL_TEXTURE_2D, 0);
+    //glassTex.unbindTexture();
     /*end draw suzunna*/
 
     /*draw ground*/

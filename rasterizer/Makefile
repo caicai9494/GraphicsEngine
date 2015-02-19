@@ -1,7 +1,7 @@
 CC=g++
 LDLIBS=-lGL -lGLU -lglut 
 CFLAGs=-c -Wall -g -O
-OBJ= main.o matrix.o vector.o
+OBJ= main.o matrix.o vector.o draw.o
 TARGET= rasterizer
 
 	
