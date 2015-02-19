@@ -3,6 +3,7 @@
 Scene::Scene(){}
 Scene::~Scene(){}
 
+GLuint programID;
 GLuint modelID;
 GLuint viewID;
 GLuint projectionID;
@@ -18,6 +19,7 @@ Texture glassTex;
 Texture grassTex;
 
 Object suzunnaObj;
+Object suzunnaObj2;
 Object groundObj;
 
 ShaderProgram shader1;
@@ -39,7 +41,7 @@ void Scene::init()
 
     glBindVertexArray(0);
 
-    /* bind cube normal + texture*/
+    /* bind suzunnan1*/
     glGenVertexArrays(1, &(suzunnaObj.VAO));
     glBindVertexArray(suzunnaObj.VAO);
 
@@ -48,11 +50,22 @@ void Scene::init()
     suzunnaObj.addData3D(t_cube_normalbuffer);
 
     glBindVertexArray(0);
-    /* end bind cube */
+    /* end bind suzunnan1 */
+
+    /* bind suzunna2*/
+    glGenVertexArrays(1, &(suzunnaObj2.VAO));
+    glBindVertexArray(suzunnaObj2.VAO);
+
+    suzunnaObj2.addData3D(t_cube_vertexbuffer);
+    suzunnaObj2.addData2D(t_cube_uvbuffer);
+    suzunnaObj2.addData3D(t_cube_normalbuffer);
+
+    glBindVertexArray(0);
+    /* end bind suzunnan2 */
 
     /* set up matrix*/
     //shader1.loadShaders("shader/light.vlsl", "shader/light.flsl");
-    GLuint programID = LoadShaders( "shader/light.vlsl", "shader/light.flsl" );
+    programID = LoadShaders( "shader/light.vlsl", "shader/light.flsl" );
     modelID = glGetUniformLocation(programID, "M");
     viewID = glGetUniformLocation(programID, "V");
     projectionID = glGetUniformLocation(programID, "P");
@@ -75,8 +88,6 @@ void Scene::init()
     grassTex.textureID = glGetUniformLocation(programID, "textureSampler");
     /* end set up texture*/
 
-    suzunnaObj.programID = programID;
-
     /*set directional light*/
     directionalLight.setDirection(glm::vec3(0.0, -1.0, 0.0));
     directionalLight.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -90,7 +101,7 @@ void Scene::init()
 
 void Scene::render()
 {
-    glUseProgram(suzunnaObj.programID);
+    glUseProgram(programID);
     
     computeMatricesFromInputs();
 

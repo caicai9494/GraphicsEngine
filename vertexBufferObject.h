@@ -11,7 +11,6 @@ class Object
 	~Object();
         GLuint VAO;
         GLuint VBO[MAX_VBO];
-        GLuint programID;
 	void addData2D(vector<glm::vec2> v2);
 	void addData3D(vector<glm::vec3> v3);
 

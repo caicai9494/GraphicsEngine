@@ -2,6 +2,10 @@
 #define _DRAW_H
 #include "core.h"
 
-void drawLine(); 
+enum LINE_METHOD{
+    DDA
+};
+
+void drawLine(LINE_METHOD method, float x0, float y0, float x1, float y1); 
 
 #endif

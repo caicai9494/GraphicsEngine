@@ -57,9 +57,30 @@ int main( void )
 	scene.init();
 
 
+        double lastTime = glfwGetTime();
 	do{
-                const float step = 0.0005;
-	        tip += step;
+	        //count FPS
+		static int frame = 0;
+
+		double currentTime = glfwGetTime();
+		if(currentTime - lastTime >= 1)
+		{
+		    printf("FPS %d per second\n", frame);
+		    frame = 0;
+		    lastTime++;
+		}
+		else
+		    frame++;
+
+		//simple animation
+		static float tip;
+		const float step = 0.050;
+		const float begin = 0.000;
+		const float end = 359.000;
+
+		tip += step;
+		if(tip > end) tip = begin;
+
 		if(tip > 359)
 		    tip = 0;
 

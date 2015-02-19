@@ -65,7 +65,8 @@ void drawScene(void)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 //  glOrtho(-30,30,-30,30,0,80);
-    gluPerspective(60,g_Aspect,.1,80);
+    //gluPerspective(60,g_Aspect,.1,80);
+    gluOrtho2D(-1.0, 600, 0, 601);
 
     // Switch to ModelView
     glMatrixMode(GL_MODELVIEW);
@@ -73,7 +74,7 @@ void drawScene(void)
 //***************************************************************************
 //**************** Do not alter anything above this line ********************
 //************************* Begin Assignment ********************************
-    drawLine();
+    drawLine(DDA, 0,0, 150, 100);
 /*
 	Matrix rot1, trans1;
 	Matrix rot2, trans2, scale2;
