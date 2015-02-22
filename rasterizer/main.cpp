@@ -74,7 +74,34 @@ void drawScene(void)
 //***************************************************************************
 //**************** Do not alter anything above this line ********************
 //************************* Begin Assignment ********************************
-    drawLine(DDA, 0,0, 150, 100);
+    glBegin(GL_POINTS);
+    //middle_point(30,0, 140, 100);
+    bresenham(0,0, 240, 1880);
+    //dda(40,0, 50, 300);
+
+
+    Edge e1 = Edge(1.0f, 7.0f, 2.0f, 3.0f);
+    Edge e2 = Edge(2.0f, 3.0f, 2.0f, 9.0f);
+    Edge e3 = Edge(7.0f, 7.0f, 2.0f, 9.0f);
+    Edge e4 = Edge(7.0f, 7.0f,13.0f,10.0f);
+    Edge e5 = Edge(13.0f, 5.0f,13.0f,10.0f);
+    Edge e6 = Edge(13.0f, 5.0f,7.0f,1.0f);
+    
+    Polygon poly_test;
+    poly_test.push_back(&e1);
+    poly_test.push_back(&e2);
+    poly_test.push_back(&e3);
+    poly_test.push_back(&e4);
+    poly_test.push_back(&e5);
+    poly_test.push_back(&e6);
+
+    sort(poly_test.begin(), poly_test.end());
+
+    for(UINT i = 0; i < poly_test.size(); i++)
+	cout << poly_test[i];
+
+
+    glEnd();
 /*
 	Matrix rot1, trans1;
 	Matrix rot2, trans2, scale2;

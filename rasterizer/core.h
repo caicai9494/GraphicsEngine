@@ -21,6 +21,16 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <iostream>
+
+
+using namespace std;
+
+typedef unsigned int UINT;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /*

@@ -8,6 +8,9 @@ GLuint modelID;
 GLuint viewID;
 GLuint projectionID;
 
+Shader2 brdfID2;
+Shader2 lightShader;
+
 GLuint brdfID;
 GLuint b_modelID;
 GLuint b_viewID;
@@ -72,10 +75,7 @@ void Scene::init()
     /* end set up matrix*/
 
     /* set up matrix*/
-    brdfID = LoadShaders( "shader/brdf.vlsl", "shader/brdf.flsl" );
-    b_modelID = glGetUniformLocation(programID, "M");
-    b_viewID = glGetUniformLocation(programID, "V");
-    b_projectionID = glGetUniformLocation(programID, "P");
+    brdfID2.loadShaders("shader/brdf.vlsl", "shader/brdf.flsl" );
     /* end set up matrix*/
 
     /* set up texture glass*/
@@ -150,18 +150,17 @@ void Scene::render()
 
 
     /*draw another suzunnan*/
-    glUseProgram(brdfID);
-    glUniformMatrix4fv(b_viewID, 1, GL_FALSE, glm::value_ptr(viewM));
-    glUniformMatrix4fv(b_projectionID, 1, GL_FALSE, glm::value_ptr(projectionM));
-
+    brdfID2.useProgram();
     trans = glm::translate(modelM, glm::vec3(0.0,-2.0, 0.0));
-    glUniformMatrix4fv(b_modelID, 1, GL_FALSE, glm::value_ptr(trans));
+    brdfID2.setUniform("M", &trans);
+    brdfID2.setUniform("P", &projectionM);
+    brdfID2.setUniform("V", &viewM);
 
     glassTex.bindTexture();
     suzunnaObj.render();
     glassTex.unbindTexture();
 
-    glUseProgramObjectARB(0);
+    brdfID2.unloadShader();
     /*end draw another suzunnan*/
 
 }
