@@ -11,13 +11,6 @@ GLuint projectionID;
 Shader2 brdfID2;
 Shader2 lightShader;
 
-GLuint brdfID;
-GLuint b_modelID;
-GLuint b_viewID;
-GLuint b_projectionID;
-
-//GLuint Texture;
-//GLuint TextureID;
 Texture glassTex;
 Texture grassTex;
 
