@@ -12,7 +12,30 @@ Object::~Object()
 	glDeleteBuffers(1, &VBO[i]);
 
     glDeleteVertexArrays(1, &VAO);
+}
 
+Object& ObjectFactory::createCustomizedObj(const char* path)
+{
+    vector<glm::vec3> vertexbuffer;
+    vector<glm::vec2> uvbuffer;
+    vector<glm::vec3> normalbuffer;
+
+    bool res = loadOBJ(path, vertexbuffer, uvbuffer, normalbuffer);
+
+    assert(res);
+
+    Object *obj = new Object();
+
+    glGenVertexArrays(1, &(obj->VAO));
+    glBindVertexArray(obj->VAO);
+
+    obj->addData3D(vertexbuffer);
+    obj->addData2D(uvbuffer);
+    obj->addData3D(normalbuffer);
+
+    glBindVertexArray(0);
+
+    return *obj;
 }
 
 void Object::addData2D(vector<glm::vec2> v2)
@@ -59,6 +82,7 @@ void Object::render()
     glBindVertexArray(0);
 }
 
+/*
 VertexBufferObject::VertexBufferObject()
 {
     //glGenVertexArrays(1, &_vao);
@@ -96,3 +120,4 @@ void VertexBufferObject::addShader(GLuint shader)
 
 
 
+*/

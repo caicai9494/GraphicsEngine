@@ -3,6 +3,8 @@
 
 #include "common_header.h"
 #include "shaderProgram.h"
+#include "common/objloader.hpp"
+
 
 class Object 
 {
@@ -11,12 +13,13 @@ class Object
 	~Object();
         GLuint VAO;
         GLuint VBO[MAX_VBO];
+
 	void addData2D(vector<glm::vec2> v2);
 	void addData3D(vector<glm::vec3> v3);
 
 	void render();
 
-	ShaderProgram shader;
+	//ShaderProgram shader;
 
     private:
 	UINT vbo_no;
@@ -24,7 +27,24 @@ class Object
 	
 };
 
+class ObjectFactory
+{
+    public:
+	ObjectFactory(){}
+	~ObjectFactory(){}
 
+	//create 3d primitive
+	Object& createSphereObj();
+	Object& createCubeObj();
+	Object& createConeObj();
+	Object& createCustomizedObj(const char* path);
+	//create 3d primitive
+	Object& createSquareObj(float w, float h);
+	Object& createTriangleObj(float w, float h);
+    private:
+};
+
+/*
 class VertexBufferObject
 {
     public:
@@ -43,4 +63,5 @@ class VertexBufferObject
 	GLuint _shader;
 };
 
+*/
 #endif

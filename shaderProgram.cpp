@@ -1,5 +1,34 @@
 #include "shaderProgram.h"
 
+
+Shader2::Shader2() 
+{
+    isLinked = false;
+}
+
+void Shader2::loadShaders(const char* vlsl, const char* flsl)
+{
+    isLinked = true;
+    programID = LoadShaders(vlsl, flsl);
+}
+void Shader2::unloadShader()
+{
+    glUseProgramObjectARB(0);
+}
+
+void Shader2::useProgram()
+{
+    glUseProgram(programID);
+}
+
+GLuint Shader2::getProgramID()
+{
+    return isLinked ? programID : 0;
+}
+
+/*-----------------------------------------------
+
+
 ShaderProgram::ShaderProgram()
 {
 	bLinked = false;

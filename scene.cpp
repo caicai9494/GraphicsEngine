@@ -21,11 +21,12 @@ GLuint b_projectionID;
 Texture glassTex;
 Texture grassTex;
 
+ObjectFactory suzunnaFactory;
 Object suzunnaObj;
 Object suzunnaObj2;
 Object groundObj;
 
-ShaderProgram shader1;
+//ShaderProgram shader1;
 
 DirectionalLight directionalLight;
 
@@ -45,14 +46,7 @@ void Scene::init()
     glBindVertexArray(0);
 
     /* bind suzunnan1*/
-    glGenVertexArrays(1, &(suzunnaObj.VAO));
-    glBindVertexArray(suzunnaObj.VAO);
-
-    suzunnaObj.addData3D(t_cube_vertexbuffer);
-    suzunnaObj.addData2D(t_cube_uvbuffer);
-    suzunnaObj.addData3D(t_cube_normalbuffer);
-
-    glBindVertexArray(0);
+    suzunnaObj = suzunnaFactory.createCustomizedObj("obj/suzanne.obj");
     /* end bind suzunnan1 */
 
     /* bind suzunna2*/
@@ -150,6 +144,7 @@ void Scene::render()
 
 
     /*draw another suzunnan*/
+    /*
     brdfID2.useProgram();
     trans = glm::translate(modelM, glm::vec3(0.0,-2.0, 0.0));
     brdfID2.setUniform("M", &trans);
@@ -161,6 +156,7 @@ void Scene::render()
     glassTex.unbindTexture();
 
     brdfID2.unloadShader();
+    */
     /*end draw another suzunnan*/
 
 }
