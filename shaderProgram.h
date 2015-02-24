@@ -7,34 +7,20 @@
 class Shader2
 {
     public:
-        Shader2() 
-	{
-	    isLinked = false;
-	}
+        Shader2();
         ~Shader2() {}
-        GLuint programID;
+
+
+	void loadShaders(const char* vlsl, const char* flsl);
+	void unloadShader();
+	void useProgram();
+
+	GLuint getProgramID();
+
+    private:
 	bool isLinked;
+        GLuint programID;
 
-	void loadShaders(const char* vlsl, const char* flsl)
-	{
-	    isLinked = true;
-            programID = LoadShaders(vlsl, flsl);
-	}
-	void unloadShader()
-	{
-            glUseProgramObjectARB(0);
-	}
-	void useProgram()
-	{
-	    glUseProgram(programID);
-	}
-
-	void setUniform(const char* sName, glm::mat4* mMatrices, int iCount = 1)
-	{
-	    if(!isLinked) return;
-            GLuint id = glGetUniformLocation(programID, sName);
-            glUniformMatrix4fv(id, iCount, GL_FALSE, glm::value_ptr(*mMatrices));
-	}
 };
 
 class ShaderProgram

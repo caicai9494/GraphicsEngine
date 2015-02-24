@@ -22,6 +22,8 @@ using namespace std;
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "color.h"
+
 using namespace glm;
 
 typedef unsigned int UINT;

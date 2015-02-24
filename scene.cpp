@@ -14,11 +14,13 @@ Shader2 lightShader;
 Texture glassTex;
 Texture grassTex;
 
+ObjectFactory primitiveFactoryy;
 Object suzunnaObj;
 Object suzunnaObj2;
 Object groundObj;
 
-ShaderProgram shader1;
+MaterialFactory materialFactory;
+//ShaderProgram shader1;
 
 DirectionalLight directionalLight;
 
@@ -28,27 +30,15 @@ extern float tip;
 void Scene::init()
 {
     /* bind ground normal + texture*/
-    glGenVertexArrays(1, &(groundObj.VAO));
-    glBindVertexArray(groundObj.VAO);
-
-    groundObj.addData3D(t_ground_vertexbuffer);
-    groundObj.addData2D(t_ground_uvbuffer);
-    groundObj.addData3D(t_ground_normalbuffer);
-
-    glBindVertexArray(0);
+    Material surfaceMaterial = materialFactory.createColorMaterial(Color::RED);
+    groundObj = primitiveFactoryy.createSquareObj(10.0f,10.0f, &surfaceMaterial);
 
     /* bind suzunnan1*/
-    glGenVertexArrays(1, &(suzunnaObj.VAO));
-    glBindVertexArray(suzunnaObj.VAO);
-
-    suzunnaObj.addData3D(t_cube_vertexbuffer);
-    suzunnaObj.addData2D(t_cube_uvbuffer);
-    suzunnaObj.addData3D(t_cube_normalbuffer);
-
-    glBindVertexArray(0);
+    suzunnaObj = primitiveFactoryy.createCustomizedObj("obj/suzanne.obj", &surfaceMaterial);
     /* end bind suzunnan1 */
 
     /* bind suzunna2*/
+    /*
     glGenVertexArrays(1, &(suzunnaObj2.VAO));
     glBindVertexArray(suzunnaObj2.VAO);
 
@@ -57,6 +47,7 @@ void Scene::init()
     suzunnaObj2.addData3D(t_cube_normalbuffer);
 
     glBindVertexArray(0);
+    */
     /* end bind suzunnan2 */
 
     /* set up matrix*/
@@ -128,13 +119,17 @@ void Scene::render()
 
     /*move upwards*/
     glm::mat4 trans_ground = glm::scale(modelM, glm::vec3(10.0f));
-    glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(trans_ground));
+
+    //glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(trans_ground));
+    glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(groundObj.modelM));
+    //glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(groundObj.modelM));
 
     groundObj.render();
 
     trans = glm::rotate(modelM, 45.0f, glm::vec3(2.0,-2.0, 0.0));
     glm::mat4 trans2 = transpose(trans);
     glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(trans2));
+    //glUniformMatrix4fv(modelID, 1, GL_FALSE, glm::value_ptr(groundObj.modelM));
     groundObj.render();
     grassTex.unbindTexture();
     /*end draw ground*/
@@ -143,6 +138,7 @@ void Scene::render()
 
 
     /*draw another suzunnan*/
+    /*
     brdfID2.useProgram();
     trans = glm::translate(modelM, glm::vec3(0.0,-2.0, 0.0));
     brdfID2.setUniform("M", &trans);
@@ -154,6 +150,7 @@ void Scene::render()
     glassTex.unbindTexture();
 
     brdfID2.unloadShader();
+    */
     /*end draw another suzunnan*/
 
 }
